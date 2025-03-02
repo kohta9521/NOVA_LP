@@ -4,11 +4,20 @@ import React, { useState, useRef } from "react";
 // next
 import Link from "next/link";
 
+// icon
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+
 // type
-export type SubItem = {
+export type SubItemGroup = {
   id: string;
-  name: string;
-  link: string;
+  title: string;
+  items: {
+    id: string;
+    icon: React.ReactNode;
+    name: string;
+    link: string;
+    desc: string;
+  }[];
 };
 
 // props
@@ -16,7 +25,7 @@ type ListItemProps = {
   id: string;
   title: string;
   link: string;
-  subItems?: SubItem[];
+  subItems?: SubItemGroup[];
 };
 
 const ListItem = ({ id, title, link, subItems = [] }: ListItemProps) => {
@@ -55,28 +64,47 @@ const ListItem = ({ id, title, link, subItems = [] }: ListItemProps) => {
         onClick={handleClick}
       >
         <div className="flex items-center justify-between">
-          <span className="text-sm font-bold mr-1">{title}</span>
+          <span className="text-sm font-semibold">{title}</span>
           {subItems.length > 0 && (
-            <span className="text-[var(--blue-primary)] text-2xl">+</span>
+            <span className="text-black">
+              <MdOutlineKeyboardArrowDown className="text-base font-medium" />
+            </span>
           )}
         </div>
-        <div className="absolute bottom-2 left-0 w-0 h-0.5 bg-[var(--blue-primary)] transition-all duration-300 group-hover:w-full" />
+        {/* <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-gray-400 transition-all duration-300 group-hover:w-full" /> */}
       </Link>
 
       {isHovered && subItems.length > 0 && (
-        <div className="absolute top-full left-1/2 -translate-x-1/2 w-80 bg-white rounded-lg shadow-lg z-50 p-4">
-          <ul>
-            {subItems.map((item) => (
-              <li key={item.id} className="py-2">
-                <Link
-                  href={item.link}
-                  className="block text-sm font-bold hover:text-[var(--blue-primary)] transition-colors"
-                >
-                  {item.name}
-                </Link>
-              </li>
+        <div className="absolute top-full left-1/2 -translate-x-1/2 w-[700px] bg-white rounded-lg shadow-lg z-50 p-6">
+          <div className="grid grid-cols-3 gap-6">
+            {subItems.map((group) => (
+              <div key={group.id} className="space-y-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <h3 className="text-sm font-bold text-black">
+                    {group.title}
+                  </h3>
+                </div>
+                <ul className="space-y-2">
+                  {group.items.map((item) => (
+                    <li key={item.id} className="mb-2">
+                      <Link
+                        href={item.link}
+                        className=" text-base font-bold text-black  transition-colors"
+                      >
+                        <div className="flex w-full items-center gap-2 mb-1">
+                          {item.icon}
+                          <p className="block w-full text-base">{item.name}</p>
+                        </div>
+                        <p className="block ml-[25px] text-xs font-medium text-black">
+                          {item.desc}
+                        </p>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       )}
     </div>
