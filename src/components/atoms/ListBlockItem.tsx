@@ -17,7 +17,7 @@ const ListBlockItem = ({ id, link, text }: ListBlockItemProps) => {
       href={link}
       className="block min-w-[130px] text-center py-2 mr-1 bg-[var(--blue-primary)] rounded-3xl"
     >
-      <p className="text-white text-base font-bold">{text}</p>
+      <p className="text-white text-sm font-bold">{text}</p>
     </Link>
   );
 };
